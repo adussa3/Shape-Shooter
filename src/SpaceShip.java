@@ -1,86 +1,110 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SpaceShip {
+public class SpaceShip extends Sprite {
     private int dx;
     private int dy;
-    private int x = 40;
-    private int y = 60;
-    private int w;
-    private int h;
-    private Image image;
+    private List<Missile> missiles;
 
-    public SpaceShip() {
-        ImageIcon ii = new ImageIcon("src/resources/spaceship.png");
-        image = ii.getImage();
+    String currentMissle = "missile1";
 
-        w = image.getWidth(null);
-        h = image.getHeight(null);
+    public SpaceShip(int x, int y) {
+        super(x, y);
+        initCraft();
     }
 
-    public void move() {
-        x += dx;
-        y += dy;
+    private void initCraft() {
+        missiles = new ArrayList<>();
+        loadImage("src/resources/spaceship.png");
+        getImageDimensions();
     }
 
-    public int getX() {
-        return x;
-    }
+    public void move(int dx, int dy) {
+        // rotate
 
-    public int getY() {
-        return y;
-    }
 
-    public int getWidth() {
-        return w;
-    }
+        //
+        x = dx;
+        y = dy;
 
-    public int getHeight() {
-        return h;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_LEFT) {
-            dx = -2;
+        if (x < 1) {
+            x = 1;
         }
 
-        if (key == KeyEvent.VK_RIGHT) {
-            dx = 2;
+        if (y < 1) {
+            y = 1;
         }
 
-        if (key == KeyEvent.VK_UP) {
-            dy = -2;
+        if (x > ShapeShooter.WIDTH - width) {
+            x = ShapeShooter.WIDTH - width;
         }
 
-        if (key == KeyEvent.VK_DOWN) {
-            dy = 2;
+        if (y > ShapeShooter.HEIGHT - height - 28) {
+            y = ShapeShooter.HEIGHT - height - 28;
         }
     }
 
-    public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_LEFT) {
-            dx = 0;
-        }
-
-        if (key == KeyEvent.VK_RIGHT) {
-            dx = 0;
-        }
-
-        if (key == KeyEvent.VK_UP) {
-            dy = 0;
-        }
-
-        if (key == KeyEvent.VK_DOWN) {
-            dy = 0;
-        }
+    public List<Missile> getMissiles() {
+        return missiles;
     }
+
+    public void fire() {
+        Missile missile = new Missile1(x + (width / 2), y);
+        if (currentMissle.equals("Missile2")) {
+            missile = new Missile2(x + (width / 2), y);
+        }
+        missiles.add(missile);
+    }
+
+//    public void keyPressed(KeyEvent e) {
+//        int key = e.getKeyCode();
+//
+//        if (key == KeyEvent.VK_SPACE) {
+//            fire();
+//        }
+//
+//        if (key == KeyEvent.VK_LEFT) {
+//            dx = -1;
+//        }
+//
+//        if (key == KeyEvent.VK_RIGHT) {
+//            dx = 1;
+//        }
+//
+//        if (key == KeyEvent.VK_UP) {
+//            dy = -1;
+//        }
+//
+//        if (key == KeyEvent.VK_DOWN) {
+//            dy = 1;
+//        }
+//
+//        if (key == KeyEvent.VK_Z) {
+//            if (currentMissle.equals("Missile2")) {
+//                currentMissle = "Missile1";
+//            } else {
+//                currentMissle = "Missile2";
+//            }
+//        }
+//    }
+
+//    public void keyReleased(KeyEvent e) {
+//        int key = e.getKeyCode();
+//
+//        if (key == KeyEvent.VK_LEFT) {
+//            dx = 0;
+//        }
+//
+//        if (key == KeyEvent.VK_RIGHT) {
+//            dx = 0;
+//        }
+//
+//        if (key == KeyEvent.VK_UP) {
+//            dy = 0;
+//        }
+//
+//        if (key == KeyEvent.VK_DOWN) {
+//            dy = 0;
+//        }
+//    }
 }

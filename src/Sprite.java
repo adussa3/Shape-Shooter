@@ -1,5 +1,5 @@
-import java.awt.Image;
-import javax.swing.ImageIcon;
+import java.awt.*;
+import javax.swing.*;
 
 public class Sprite {
     protected int x;
@@ -43,5 +43,9 @@ public class Sprite {
 
     public void setVisible(Boolean visible) {
         this.visible = visible;
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
     }
 }
