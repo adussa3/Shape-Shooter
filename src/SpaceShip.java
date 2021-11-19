@@ -4,25 +4,24 @@ import java.util.List;
 public class SpaceShip extends Sprite {
     private int dx;
     private int dy;
-    private List<Missile> missiles;
 
+    static String direction = "up";
+
+    private List<Missile> missiles = new ArrayList<>();;
     String currentMissle = "missile1";
 
     public SpaceShip(int x, int y) {
         super(x, y);
+        direction = "up";
         initCraft();
     }
 
-    private void initCraft() {
-        missiles = new ArrayList<>();
-        loadImage("src/resources/spaceship.png");
+    public void initCraft() {
+        loadImage("src/resources/spaceship_" + direction + ".png");
         getImageDimensions();
     }
 
     public void move(int dx, int dy) {
-        // rotate
-
-
         //
         x = dx;
         y = dy;

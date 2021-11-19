@@ -1,11 +1,3 @@
-import com.apple.eawt.event.GestureUtilities;
-import com.apple.eawt.event.MagnificationEvent;
-import com.apple.eawt.event.RotationEvent;
-import com.apple.eawt.event.SwipeEvent;
-import multitouchgestures.GestureAdapter;
-import multitouchgestures.MultiTouchGestureUtilities;
-import multitouchgestures.event.RotateGestureEvent;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -32,6 +24,13 @@ public class Board extends JPanel implements ActionListener {
     private final int B_HEIGHT = SpaceShooter.HEIGHT;
     private final int DELAY = 15;
 
+    private final int THRESHOLD = 35;
+
+    private int countLeft = 0;
+    private int countRight = 0;
+
+    int count = 0;
+
     public Board() {
         initBoard();
     }
@@ -45,70 +44,82 @@ public class Board extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
 
-//        GestureUtilities.addGestureListenerTo(this, new com.apple.eawt.event.GestureAdapter() {
-////            @Override
-////            public void rotate(RotationEvent e) {
-////                super.rotate(e);
-////                System.out.println("Hi");
-////            }
-//
-//            @Override
-//            public void swipedLeft(SwipeEvent e) {
-//                super.swipedLeft(e);
-//                System.out.println("Hello");
-//            }
-//        });
-
-        MultiTouchGestureUtilities.addGestureListener(this, new GestureAdapter() {
-            @Override
-            public void rotate(RotateGestureEvent e) {
-                super.rotate(e);
-                System.out.println("getRotation(): " + e.getRotation());
-            }
-        });
-
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 boolean isShiftDown = e.isShiftDown();
                 boolean isWheelRotationPositive = e.getWheelRotation() > 0;
 
-//                // UP
-//                if (!isShiftDown && isWheelRotationPositive) {
-//                    spaceship.currentMissle = "Missile1";
-//                }
-//
-//                // DOWN
-//                if (!isShiftDown && !isWheelRotationPositive) {
-//                    spaceship.currentMissle = "Missile2";
-//                }
-//
-//                // LEFT
-//                if (isShiftDown && isWheelRotationPositive) {
-//
-//                }
-//
-//                // RIGHT
-//                if (isShiftDown && !isWheelRotationPositive) {
-//
-//                }
+                // UP
+                if (!isShiftDown && isWheelRotationPositive) {
+                    countLeft = 0;
+                    countRight = 0;
+                    spaceship.currentMissle = "Missile1";
+                }
 
-                if (!isShiftDown) {
-                    if (isWheelRotationPositive) {
-                        // UP
-                        spaceship.currentMissle = "Missile1";
-                    } else {
-                        // DOWN
-                        spaceship.currentMissle = "Missile2";
-                    }
-                } else {
-                    if (isWheelRotationPositive) {
-                        // LEFT
+                // DOWN
+                if (!isShiftDown && !isWheelRotationPositive) {
+                    countLeft = 0;
+                    countRight = 0;
+                    spaceship.currentMissle = "Missile2";
+                }
 
-                    } else {
-                        // RIGHT
+                // LEFT
+                if (isShiftDown && isWheelRotationPositive) {
+                    countLeft++;
+                    countRight = 0;
+
+                    if (countLeft >= 30) {
+                        countLeft = 0;
+                        if (spaceship.direction.equals("up")) {
+                            spaceship.direction = "left";
+                        } else if (spaceship.direction.equals("down")) {
+                            spaceship.direction = "right";
+                        } else if (spaceship.direction.equals("left")) {
+                            spaceship.direction = "down";
+                        } else if (spaceship.direction.equals("right")) {
+                            spaceship.direction = "up";
+                        }
+                        spaceship.initCraft();
                     }
                 }
+
+                // RIGHT
+                if (isShiftDown && !isWheelRotationPositive) {
+                    countLeft = 0;
+                    countRight++;
+
+                    if (countRight >= THRESHOLD) {
+                        countRight = 0;
+                        if (spaceship.direction.equals("up")) {
+                            spaceship.direction = "right";
+                        } else if (spaceship.direction.equals("down")) {
+                            spaceship.direction = "left";
+                        } else if (spaceship.direction.equals("left")) {
+                            spaceship.direction = "up";
+                        } else if (spaceship.direction.equals("right")) {
+                            spaceship.direction = "down";
+                        }
+                        spaceship.initCraft();
+                    }
+                }
+
+//                if (!isShiftDown) {
+//                    if (isWheelRotationPositive) {
+//                        // UP
+//                        spaceship.currentMissle = "Missile1";
+//                    } else {
+//                        // DOWN
+//                        spaceship.currentMissle = "Missile2";
+//                    }
+//                } else {
+//                    if (isWheelRotationPositive) {
+//                        // LEFT
+//
+//                    } else {
+//                        // RIGHT
+//                    }
+//                }
             }
         });
 

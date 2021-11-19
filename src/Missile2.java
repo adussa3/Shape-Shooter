@@ -5,7 +5,7 @@ public class Missile2 extends Missile {
 
     @Override
     void initMissile() {
-        loadImage("src/resources/missile2.png");
+        loadImage("src/resources/missile2_" + SpaceShip.direction + ".png");
         getImageDimensions();
     }
 }
