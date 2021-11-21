@@ -18,31 +18,39 @@ public class Board extends JPanel implements ActionListener {
     private int score;
 
     private final Random random = new Random();
-    private final int ICRAFT_X = SpaceShooter.WIDTH / 2;
+    private final int ICRAFT_X = SpaceShooter.WIDTH / 2 - 50;
     private final int ICRAFT_Y = SpaceShooter.HEIGHT - 200;
     private final int B_WIDTH = SpaceShooter.WIDTH;
     private final int B_HEIGHT = SpaceShooter.HEIGHT;
     private final int DELAY = 15;
+    private final int BUTTON_WIDTH = 200;
+    private final int BUTTON_HEIGHT = 60;
 
-    private final int THRESHOLD = 35;
+    private final int THRESHOLD = 30;
 
     private int countLeft = 0;
     private int countRight = 0;
-
-    int count = 0;
 
     public Board() {
         initBoard();
     }
 
     private void initBoard() {
-        //addKeyListener(new TAdapter());
         setFocusable(true);
         ingame = true;
         score = 0;
 
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
+
+        addKeyListener(new TAdapter());
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                spaceship.fire();
+            }
+        });
 
         addMouseWheelListener(new MouseWheelListener() {
             @Override
@@ -69,7 +77,7 @@ public class Board extends JPanel implements ActionListener {
                     countLeft++;
                     countRight = 0;
 
-                    if (countLeft >= 30) {
+                    if (countLeft >= THRESHOLD) {
                         countLeft = 0;
                         if (spaceship.direction.equals("up")) {
                             spaceship.direction = "left";
@@ -103,30 +111,6 @@ public class Board extends JPanel implements ActionListener {
                         spaceship.initCraft();
                     }
                 }
-
-//                if (!isShiftDown) {
-//                    if (isWheelRotationPositive) {
-//                        // UP
-//                        spaceship.currentMissle = "Missile1";
-//                    } else {
-//                        // DOWN
-//                        spaceship.currentMissle = "Missile2";
-//                    }
-//                } else {
-//                    if (isWheelRotationPositive) {
-//                        // LEFT
-//
-//                    } else {
-//                        // RIGHT
-//                    }
-//                }
-            }
-        });
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                spaceship.fire();
             }
         });
 
@@ -201,6 +185,17 @@ public class Board extends JPanel implements ActionListener {
 
         msg = "Score: " + score;
         g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2, B_HEIGHT / 2 + 20);
+
+        JButton backButton = new JButton();
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ShapeShooter.cardLayout.show(ShapeShooter.panel, "home");
+            }
+        });
+        backButton.setBounds(ShapeShooter.WIDTH / 2 - BUTTON_WIDTH / 2, ShapeShooter.HEIGHT - 200, BUTTON_WIDTH, BUTTON_HEIGHT);
+        backButton.setText("Back");
+        add(backButton);
     }
 
     @Override
@@ -221,13 +216,19 @@ public class Board extends JPanel implements ActionListener {
 
     private void updateShip() {
         if (spaceship.isVisible()) {
-            Point point = MouseInfo.getPointerInfo().getLocation();
-            SwingUtilities.convertPointFromScreen(point, this);
-            int dx = (int) (point.getX() - (spaceship.width / 2));
-            int dy = (int) (point.getY() - (spaceship.height / 2));
-            spaceship.move(dx, dy);
+            spaceship.move();
         }
     }
+
+//    private void updateShip() {
+//        if (spaceship.isVisible()) {
+//            Point point = MouseInfo.getPointerInfo().getLocation();
+//            SwingUtilities.convertPointFromScreen(point, this);
+//            int dx = (int) (point.getX() - (spaceship.width / 2));
+//            int dy = (int) (point.getY() - (spaceship.height / 2));
+//            spaceship.move(dx, dy);
+//        }
+//    }
 
     private void updateMissiles() {
         List<Missile> missiles = spaceship.getMissiles();
@@ -285,15 +286,15 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-//    private class TAdapter extends KeyAdapter {
-//        @Override
-//        public void keyReleased(KeyEvent e) {
-//            spaceship.keyReleased(e);
-//        }
-//
-//        @Override
-//        public void keyPressed(KeyEvent e) {
-//            spaceship.keyPressed(e);
-//        }
-//    }
+    private class TAdapter extends KeyAdapter {
+        @Override
+        public void keyReleased(KeyEvent e) {
+            spaceship.keyReleased(e);
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            spaceship.keyPressed(e);
+        }
+    }
 }

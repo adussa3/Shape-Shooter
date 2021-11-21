@@ -5,12 +5,20 @@ public class ShapeShooter extends JFrame {
     static final int WIDTH = 800;
     static final int HEIGHT = 600;
 
+    static CardLayout cardLayout = new CardLayout();
+    static JPanel panel = new JPanel(cardLayout);
+
     public ShapeShooter() {
         createAndShowGUI();
     }
 
-    private void createAndShowGUI() {
-        add(new Board());
+    public void createAndShowGUI() {
+        Home home = new Home();
+        Instructions instructions = new Instructions();
+        panel.add(home, "home");
+        panel.add(instructions, "instructions");
+
+        add(panel);
         pack();
 
         setResizable(false);
