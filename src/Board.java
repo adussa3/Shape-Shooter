@@ -26,8 +26,11 @@ public class Board extends JPanel implements ActionListener {
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 60;
 
-    private final int THRESHOLD = 30;
+    private final int WEAPONS_THRESHOLD = 10;
+    private final int ROTATION_THRESHOLD = 40;
 
+    private int countUp = 0;
+    private int countDown = 0;
     private int countLeft = 0;
     private int countRight = 0;
 
@@ -60,24 +63,34 @@ public class Board extends JPanel implements ActionListener {
 
                 // UP
                 if (!isShiftDown && isWheelRotationPositive) {
-                    countLeft = 0;
-                    countRight = 0;
-                    spaceship.currentMissle = "Missile1";
+                    countUp++;
+                    countDown = 0;
+
+                    if (countUp >= WEAPONS_THRESHOLD) {
+                        countUp = 0;
+                        spaceship.currentMissle = "Missile1";
+                    }
                 }
 
                 // DOWN
                 if (!isShiftDown && !isWheelRotationPositive) {
-                    countLeft = 0;
-                    countRight = 0;
-                    spaceship.currentMissle = "Missile2";
+                    countUp = 0;
+                    countDown++;
+
+                    if (countDown >= WEAPONS_THRESHOLD) {
+                        countDown = 0;
+                        spaceship.currentMissle = "Missile2";
+                    }
                 }
 
                 // LEFT
                 if (isShiftDown && isWheelRotationPositive) {
+                    countUp = 0;
+                    countDown = 0;
                     countLeft++;
                     countRight = 0;
 
-                    if (countLeft >= THRESHOLD) {
+                    if (countLeft >= ROTATION_THRESHOLD) {
                         countLeft = 0;
                         if (spaceship.direction.equals("up")) {
                             spaceship.direction = "left";
@@ -94,10 +107,12 @@ public class Board extends JPanel implements ActionListener {
 
                 // RIGHT
                 if (isShiftDown && !isWheelRotationPositive) {
+                    countUp = 0;
+                    countDown = 0;
                     countLeft = 0;
                     countRight++;
 
-                    if (countRight >= THRESHOLD) {
+                    if (countRight >= ROTATION_THRESHOLD) {
                         countRight = 0;
                         if (spaceship.direction.equals("up")) {
                             spaceship.direction = "right";
