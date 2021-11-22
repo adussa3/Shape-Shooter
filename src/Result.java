@@ -94,6 +94,9 @@ public class Result {
 	}
 	
 	public String getName() {
+		if (matchedTemplate == null) {
+			return "null";
+		}
 		return this.matchedTemplate.getName();
 	}
 	public double getScore() {

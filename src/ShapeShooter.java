@@ -7,6 +7,7 @@ public class ShapeShooter extends JFrame {
 
     static CardLayout cardLayout = new CardLayout();
     static JPanel panel = new JPanel(cardLayout);
+    static Board board = new Board();
 
     public ShapeShooter() {
         createAndShowGUI();
@@ -18,7 +19,9 @@ public class ShapeShooter extends JFrame {
         panel.add(home, "home");
         panel.add(instructions, "instructions");
 
-        add(panel);
+
+
+        add(board);
         pack();
 
         setResizable(false);
