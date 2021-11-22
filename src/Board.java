@@ -165,23 +165,27 @@ public class Board extends JPanel implements ActionListener {
         Result result = dollarRecognizer.recognize(p);
 
         if (result.getName().equals("star")) {
-            score += aliens.size();
+            score -= 10;
             aliens = new ArrayList<>();
         } else if (result.getName().equals("triangle")) {
-            for (int i = 0; i <= (aliens.size() / 2); i++) {
-                score++;
-                aliens.remove(0);
+            score -= 5;
+            for (int i = 0; i < 5; i++) {
+                int x = random.nextInt(10);
+                aliens.remove(x);
             }
         }
 
         if (spaceship.invincibility == 0) {
             if (result.getName().equals("circle")) {
+                score -= 5;
                 spaceship.invincibility = 1;
                 spaceship.initCraft();
             } else if (result.getName().equals("rectangle")) {
                 spaceship.invincibility = 2;
+                score -= 10;
                 spaceship.initCraft();
             } else if (result.getName().equals("pigtail")) {
+                score -= 15;
                 spaceship.invincibility = 3;
                 spaceship.initCraft();
             }
