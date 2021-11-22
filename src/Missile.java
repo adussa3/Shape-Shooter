@@ -1,6 +1,4 @@
 public abstract class Missile extends Sprite {
-    private final int BOARD_HEIGHT = 600;
-    private final int BOARD_WIDTH = 800;
 
     private int damage;
     private String direction;
@@ -27,7 +25,7 @@ public abstract class Missile extends Sprite {
             x += speed;
         }
 
-        if (x < 0 || x > BOARD_WIDTH || y < 0 || y > BOARD_HEIGHT) {
+        if (x < 0 || x > SpaceShooter.WIDTH || y < 0 || y > SpaceShooter.HEIGHT) {
             visible = false;
         }
     }

@@ -12,16 +12,12 @@ import javax.swing.*;
 public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
-    private SpaceShooter SpaceShooter;
     private SpaceShip spaceship;
     public List<Alien> aliens;
-    private boolean ingame;
-    private int score;
     private static DollarRecognizer dollarRecognizer = new DollarRecognizer();
     private ArrayList<Point2D> strokePoints = new ArrayList<>();
-    private Result lastResult = null;
-
     private final Random random = new Random();
+
     private final int ICRAFT_X = SpaceShooter.WIDTH / 2 - 50;
     private final int ICRAFT_Y = SpaceShooter.HEIGHT - 200;
     private final int B_WIDTH = SpaceShooter.WIDTH;
@@ -29,10 +25,11 @@ public class Board extends JPanel implements ActionListener {
     private final int DELAY = 15;
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 60;
-
     private final int WEAPONS_THRESHOLD = 10;
     private final int ROTATION_THRESHOLD = 40;
 
+    private boolean ingame;
+    private int score;
     private int countUp = 0;
     private int countDown = 0;
     private int countLeft = 0;
@@ -46,128 +43,103 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
         ingame = true;
         score = 0;
-
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
 
         addKeyListener(new TAdapter());
 
         addMouseListener(new MouseAdapter() {
-
-
             @Override
             public void mousePressed(MouseEvent e) {
                 strokePoints = new ArrayList<Point2D>();
                 strokePoints.add(e.getPoint());
-                lastResult = null;
                 repaint();
             }
-
             @Override
             public void mouseReleased(MouseEvent e) {
                 strokePoints.add(e.getPoint());
                 Result result = stroke(strokePoints);
                 System.out.println(result.getName());
                 strokePoints = new ArrayList<>();
-                lastResult = result;
                 repaint();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
             }
         });
 
-        addMouseMotionListener(new MouseMotionListener() {
+        addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 strokePoints.add(e.getPoint());
                 repaint();
             }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-
-            }
         });
 
+        addMouseWheelListener(e -> {
+            boolean isShiftDown = e.isShiftDown();
+            boolean isWheelRotationPositive = e.getWheelRotation() > 0;
 
-        addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                boolean isShiftDown = e.isShiftDown();
-                boolean isWheelRotationPositive = e.getWheelRotation() > 0;
+            // UP
+            if (!isShiftDown && isWheelRotationPositive) {
+                countUp++;
+                countDown = 0;
 
-                // UP
-                if (!isShiftDown && isWheelRotationPositive) {
-                    countUp++;
-                    countDown = 0;
-
-                    if (countUp >= WEAPONS_THRESHOLD) {
-                        countUp = 0;
-                        spaceship.currentMissle = "Missile1";
-                    }
-                }
-
-                // DOWN
-                if (!isShiftDown && !isWheelRotationPositive) {
+                if (countUp >= WEAPONS_THRESHOLD) {
                     countUp = 0;
-                    countDown++;
-
-                    if (countDown >= WEAPONS_THRESHOLD) {
-                        countDown = 0;
-                        spaceship.currentMissle = "Missile2";
-                    }
+                    spaceship.currentMissle = "Missile1";
                 }
+            }
 
-                // LEFT
-                if (isShiftDown && isWheelRotationPositive) {
-                    countUp = 0;
+            // DOWN
+            if (!isShiftDown && !isWheelRotationPositive) {
+                countUp = 0;
+                countDown++;
+
+                if (countDown >= WEAPONS_THRESHOLD) {
                     countDown = 0;
-                    countLeft++;
-                    countRight = 0;
-
-                    if (countLeft >= ROTATION_THRESHOLD) {
-                        countLeft = 0;
-                        if (spaceship.direction.equals("up")) {
-                            spaceship.direction = "left";
-                        } else if (spaceship.direction.equals("down")) {
-                            spaceship.direction = "right";
-                        } else if (spaceship.direction.equals("left")) {
-                            spaceship.direction = "down";
-                        } else if (spaceship.direction.equals("right")) {
-                            spaceship.direction = "up";
-                        }
-                        spaceship.initCraft();
-                    }
+                    spaceship.currentMissle = "Missile2";
                 }
+            }
 
-                // RIGHT
-                if (isShiftDown && !isWheelRotationPositive) {
-                    countUp = 0;
-                    countDown = 0;
+            // LEFT
+            if (isShiftDown && isWheelRotationPositive) {
+                countUp = 0;
+                countDown = 0;
+                countLeft++;
+                countRight = 0;
+
+                if (countLeft >= ROTATION_THRESHOLD) {
                     countLeft = 0;
-                    countRight++;
-
-                    if (countRight >= ROTATION_THRESHOLD) {
-                        countRight = 0;
-                        if (spaceship.direction.equals("up")) {
-                            spaceship.direction = "right";
-                        } else if (spaceship.direction.equals("down")) {
-                            spaceship.direction = "left";
-                        } else if (spaceship.direction.equals("left")) {
-                            spaceship.direction = "up";
-                        } else if (spaceship.direction.equals("right")) {
-                            spaceship.direction = "down";
-                        }
-                        spaceship.initCraft();
+                    if (spaceship.direction.equals("up")) {
+                        spaceship.direction = "left";
+                    } else if (spaceship.direction.equals("down")) {
+                        spaceship.direction = "right";
+                    } else if (spaceship.direction.equals("left")) {
+                        spaceship.direction = "down";
+                    } else if (spaceship.direction.equals("right")) {
+                        spaceship.direction = "up";
                     }
+                    spaceship.initCraft();
+                }
+            }
+
+            // RIGHT
+            if (isShiftDown && !isWheelRotationPositive) {
+                countUp = 0;
+                countDown = 0;
+                countLeft = 0;
+                countRight++;
+
+                if (countRight >= ROTATION_THRESHOLD) {
+                    countRight = 0;
+                    if (spaceship.direction.equals("up")) {
+                        spaceship.direction = "right";
+                    } else if (spaceship.direction.equals("down")) {
+                        spaceship.direction = "left";
+                    } else if (spaceship.direction.equals("left")) {
+                        spaceship.direction = "up";
+                    } else if (spaceship.direction.equals("right")) {
+                        spaceship.direction = "down";
+                    }
+                    spaceship.initCraft();
                 }
             }
         });
@@ -229,6 +201,7 @@ public class Board extends JPanel implements ActionListener {
             drawGameOver(g);
         }
 
+        // draw stroke on screen for user to see
         g.setColor(Color.white);
         for (int i = 0; i < strokePoints.size() - 1; i++) {
             g.drawLine((int) strokePoints.get(i).getX(), (int) strokePoints.get(i).getY(), (int) strokePoints.get(i + 1).getX(), (int) strokePoints.get(i + 1).getY());
@@ -374,7 +347,6 @@ public class Board extends JPanel implements ActionListener {
         }
 
     }
-
 
     private class TAdapter extends KeyAdapter {
         @Override

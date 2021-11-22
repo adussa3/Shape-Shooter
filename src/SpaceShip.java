@@ -6,9 +6,7 @@ public class SpaceShip extends Sprite {
     private int dx;
     private int dy;
     int invincibility;
-
     static String direction = "up";
-
     private List<Missile> missiles = new ArrayList<>();;
     String currentMissle = "missile1";
 
@@ -35,7 +33,6 @@ public class SpaceShip extends Sprite {
         getImageDimensions();
     }
 
-
     public void move() {
         x += dx;
         y += dy;
@@ -57,28 +54,6 @@ public class SpaceShip extends Sprite {
         }
     }
 
-    public void move(int dx, int dy) {
-        x += dx;
-        y += dy;
-
-        if (x < 1) {
-            x = 1;
-        }
-
-        if (y < 1) {
-            y = 1;
-        }
-
-        if (x > SpaceShooter.WIDTH - width) {
-            x = SpaceShooter.WIDTH - width;
-        }
-
-        if (y > SpaceShooter.HEIGHT - height - 28) {
-            y = SpaceShooter.HEIGHT - height - 28;
-        }
-    }
-
-
     public List<Missile> getMissiles() {
         return missiles;
     }
@@ -90,7 +65,6 @@ public class SpaceShip extends Sprite {
         }
         missiles.add(missile);
     }
-
 
 
     public void keyPressed(KeyEvent e) {
@@ -114,14 +88,6 @@ public class SpaceShip extends Sprite {
 
         if (key == KeyEvent.VK_SPACE) {
             fire();
-        }
-
-        if (key == KeyEvent.VK_Z) {
-            if (currentMissle.equals("Missile2")) {
-                currentMissle = "Missile1";
-            } else {
-                currentMissle = "Missile2";
-            }
         }
     }
 
