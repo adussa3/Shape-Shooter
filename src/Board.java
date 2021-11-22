@@ -50,6 +50,11 @@ public class Board extends JPanel implements ActionListener {
 
         addMouseListener(new MouseAdapter() {
             @Override
+            public void mouseClicked(MouseEvent e) {
+                spaceship.fire();
+            }
+
+            @Override
             public void mousePressed(MouseEvent e) {
                 strokePoints = new ArrayList<Point2D>();
                 strokePoints.add(e.getPoint());
@@ -59,7 +64,6 @@ public class Board extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent e) {
                 strokePoints.add(e.getPoint());
                 Result result = stroke(strokePoints);
-                System.out.println(result.getName());
                 strokePoints = new ArrayList<>();
                 repaint();
             }
@@ -161,20 +165,26 @@ public class Board extends JPanel implements ActionListener {
         Result result = dollarRecognizer.recognize(p);
 
         if (result.getName().equals("star")) {
+            score += aliens.size();
             aliens = new ArrayList<>();
         } else if (result.getName().equals("triangle")) {
-            for (int i = 0; i < aliens.size() / 2; i++) {
-                aliens.remove(i);
+            for (int i = 0; i <= (aliens.size() / 2); i++) {
+                score++;
+                aliens.remove(0);
             }
-        } else if (result.getName().equals("circle")) {
-            spaceship.invincibility = 1;
-            spaceship.initCraft();
-        } else if (result.getName().equals("rectangle")) {
-            spaceship.invincibility = 2;
-            spaceship.initCraft();
-        } else if (result.getName().equals("pigtail")) {
-            spaceship.invincibility = 3;
-            spaceship.initCraft();
+        }
+
+        if (spaceship.invincibility == 0) {
+            if (result.getName().equals("circle")) {
+                spaceship.invincibility = 1;
+                spaceship.initCraft();
+            } else if (result.getName().equals("rectangle")) {
+                spaceship.invincibility = 2;
+                spaceship.initCraft();
+            } else if (result.getName().equals("pigtail")) {
+                spaceship.invincibility = 3;
+                spaceship.initCraft();
+            }
         }
 
         return result;
@@ -281,7 +291,6 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-
     private void updateMissiles() {
         List<Missile> missiles = spaceship.getMissiles();
         for (int i = 0; i < missiles.size(); i++) {
@@ -340,12 +349,9 @@ public class Board extends JPanel implements ActionListener {
             }
         }
 
-        if (aliens.size() == 0) {
-            while (aliens.size() < 10) {
-                generateAlien();
-            }
+        while (aliens.size() < 10) {
+            generateAlien();
         }
-
     }
 
     private class TAdapter extends KeyAdapter {
