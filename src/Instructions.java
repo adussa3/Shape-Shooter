@@ -10,7 +10,7 @@ public class Instructions extends JPanel {
     private SpaceShooter spaceShooter;
 
     private final int BUTTON_WIDTH = 100;
-    private final int BUTTON_HEIGHT = 100;
+    private final int BUTTON_HEIGHT = 60;
 
     public Instructions() {
         initInstructions();
