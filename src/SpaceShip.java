@@ -5,9 +5,7 @@ import java.util.List;
 public class SpaceShip extends Sprite {
     private int dx;
     private int dy;
-    boolean blue;
-    boolean green;
-    boolean red;
+    int invincibility;
 
     static String direction = "up";
 
@@ -17,23 +15,22 @@ public class SpaceShip extends Sprite {
     public SpaceShip(int x, int y) {
         super(x, y);
         direction = "up";
-        blue = false;
-        green = false;
-        red = false;
+        invincibility = 0;
         initCraft();
     }
 
     public void initCraft() {
-        if (blue){
+        if (invincibility == 0) {
+            loadImage("src/resources/spaceship_" + direction + ".png");
+        }
+        if (invincibility == 1){
             loadImage("src/resources/spaceshipBlue_" + direction + ".png");
         }
-        if (green){
+        if (invincibility == 2){
             loadImage("src/resources/spaceshipGreen_" + direction + ".png");
         }
-        if (red) {
+        if (invincibility == 3) {
             loadImage("src/resources/spaceshipRed_" + direction + ".png");
-        } else {
-            loadImage("src/resources/spaceship_" + direction + ".png");
         }
         getImageDimensions();
     }

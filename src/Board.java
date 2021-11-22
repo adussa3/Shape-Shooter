@@ -195,13 +195,13 @@ public class Board extends JPanel implements ActionListener {
                 aliens.remove(i);
             }
         } else if (result.getName().equals("circle")) {
-            spaceship.blue = true;
+            spaceship.invincibility = 1;
             spaceship.initCraft();
         } else if (result.getName().equals("rectangle")) {
-            spaceship.green = true;
+            spaceship.invincibility = 2;
             spaceship.initCraft();
         } else if (result.getName().equals("pigtail")) {
-            spaceship.red = true;
+            spaceship.invincibility = 3;
             spaceship.initCraft();
         }
 
@@ -286,6 +286,8 @@ public class Board extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        grabFocus();
+
         inGame();
         updateShip();
         updateMissiles();
@@ -335,20 +337,11 @@ public class Board extends JPanel implements ActionListener {
         for (Alien alien : aliens) {
             Rectangle r2 = alien.getBounds();
             if (r3.intersects(r2)) {
-                if (spaceship.blue) {
-                    spaceship.blue = false;
-                    spaceship.initCraft();
+                spaceship.invincibility--;
+                if (spaceship.invincibility >= 0) {
+                    score++;
                     alien.setVisible(false);
-                } else if (spaceship.green) {
-                    spaceship.green = false;
-                    spaceship.blue = true;
                     spaceship.initCraft();
-                    alien.setVisible(false);
-                } else if (spaceship.red) {
-                    spaceship.red = false;
-                    spaceship.green = true;
-                    spaceship.initCraft();
-                    alien.setVisible(false);
                 } else {
                     spaceship.setVisible(false);
                     alien.setVisible(false);
