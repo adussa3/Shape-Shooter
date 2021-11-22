@@ -85,10 +85,6 @@ public class SpaceShip extends Sprite {
         if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) {
             dy = 2;
         }
-
-        if (key == KeyEvent.VK_SPACE) {
-            fire();
-        }
     }
 
     public void keyReleased(KeyEvent e) {
