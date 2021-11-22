@@ -21,7 +21,7 @@ public class ShapeShooter extends JFrame {
 
 
 
-        add(board);
+        add(panel);
         pack();
 
         setResizable(false);

@@ -20,18 +20,14 @@ public class SpaceShip extends Sprite {
     }
 
     public void initCraft() {
-        loadImage("src/resources/spaceship_" + direction + ".png");
-        getImageDimensions();
-    }
-
-    public void changeCraft() {
-        if (invincible) {
+        if (!invincible) {
             loadImage("src/resources/spaceship_" + direction + ".png");
         } else {
             loadImage("src/resources/spaceshipInvincible_" + direction + ".png");
         }
         getImageDimensions();
     }
+
 
     public void move() {
         x += dx;

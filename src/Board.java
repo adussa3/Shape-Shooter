@@ -18,8 +18,6 @@ public class Board extends JPanel implements ActionListener {
     private boolean ingame;
     private int score;
     private static DollarRecognizer dollarRecognizer = new DollarRecognizer();
-    private boolean isStroke;
-    private boolean isDragging;
     private ArrayList<Point2D> strokePoints = new ArrayList<>();
     private Result lastResult = null;
 
@@ -55,35 +53,29 @@ public class Board extends JPanel implements ActionListener {
         addKeyListener(new TAdapter());
 
         addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                if (!e.isPopupTrigger()) {
-//                    spaceship.fire();
-//                }
-//            }
+
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger()) {
+                //if (e.isPopupTrigger()) {
                     strokePoints = new ArrayList<Point2D>();
                     // translate to canvas coordinate system
                     strokePoints.add(e.getPoint());
                     lastResult = null;
                     repaint();
-                }
+                //}
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (e.isPopupTrigger()) {
+                //if (e.isPopupTrigger()) {
                     // translate to canvas coordinate system
                     strokePoints.add(e.getPoint());
-                    Result result = dollarRecognizer.recognize(strokePoints);
-                    stroke(strokePoints);
+                    Result result = stroke(strokePoints);
                     System.out.println(result.getName());
                     lastResult = result;
                     repaint();
-                }
+                //}
             }
 
             @Override
@@ -100,11 +92,10 @@ public class Board extends JPanel implements ActionListener {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    //Point p = SwingUtilities.convertPoint(SpaceShooter.panel, e.getPoint(), SpaceShooter.board);
+                //if (e.isPopupTrigger()) {
                     strokePoints.add(e.getPoint());
                     repaint();
-                }
+               // }
             }
 
             @Override
@@ -113,65 +104,6 @@ public class Board extends JPanel implements ActionListener {
             }
         });
 
-
-
-//
-//        addMouseMotionListener(new MouseMotionListener() {
-//            @Override
-//            public void mouseDragged(MouseEvent e) {
-//                Point p = SwingUtilities.convertPoint(this, e.getPoint(), SpaceShooter.panel);
-//                points.add(p);
-//                repaint();
-//                if (e.isPopupTrigger()) {
-//                    isStroke = true;
-//                    strokePoints.add(e.getPoint());
-//                    repaint();
-//                } else {
-//                    //if it just started a drag
-//                    if (!isDragging) {
-//                        isDragging = true;
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void mouseMoved(MouseEvent e) {
-//
-//            }
-//        });
-//
-//        addMouseListener(new MouseListener() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent e) {
-//                if (isStroke) {
-//                    isStroke = false;
-//                    stroke(strokePoints);
-//                    strokePoints = new ArrayList<>();
-//                    repaint();
-//                }
-//                isDragging = false;
-//            }
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//
-//            }
-//        });
 
         addMouseWheelListener(new MouseWheelListener() {
             @Override
@@ -260,7 +192,7 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    public void stroke(ArrayList<Point2D> p) {
+    public Result stroke(ArrayList<Point2D> p) {
         Result result = dollarRecognizer.recognize(p);
         String shape = result.getName();
 
@@ -272,8 +204,10 @@ public class Board extends JPanel implements ActionListener {
             }
         } else if (result.getName().equals("circle")) {
             spaceship.invincible = true;
-            spaceship.changeCraft();
+            spaceship.initCraft();
         }
+
+        return result;
     }
 
     private void generateAlien() {
@@ -369,15 +303,6 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-//    private void updateShip() {
-//        if (spaceship.isVisible()) {
-//            Point point = MouseInfo.getPointerInfo().getLocation();
-//            SwingUtilities.convertPointFromScreen(point, this);
-//            int dx = (int) (point.getX() - (spaceship.width / 2));
-//            int dy = (int) (point.getY() - (spaceship.height / 2));
-//            spaceship.move(dx, dy);
-//        }
-//    }
 
     private void updateMissiles() {
         List<Missile> missiles = spaceship.getMissiles();
@@ -409,7 +334,8 @@ public class Board extends JPanel implements ActionListener {
             if (r3.intersects(r2)) {
                 if (spaceship.invincible) {
                     spaceship.invincible = false;
-                    spaceship.changeCraft();
+                    spaceship.initCraft();
+                    alien.setVisible(false);
                 } else {
                     spaceship.setVisible(false);
                     alien.setVisible(false);
@@ -435,57 +361,13 @@ public class Board extends JPanel implements ActionListener {
             }
         }
 
-        while (aliens.size() < 10) {
-            generateAlien();
+        if (aliens.size() == 0) {
+            while (aliens.size() < 10) {
+                generateAlien();
+            }
         }
-    }
 
-//
-//    @Override
-//    public void mousePressed(MouseEvent e) {
-//        strokePoints = new ArrayList<Point2D>();
-//        // translate to canvas coordinate system
-//        Point p = SwingUtilities.convertPoint(this, e.getPoint(), SpaceShooter.panel);
-//        strokePoints.add(p);
-//        lastResult = null;
-//        repaint();
-//    }
-//
-//    @Override
-//    public void mouseReleased(MouseEvent e) {
-//        // translate to canvas coordinate system
-//        Point p = SwingUtilities.convertPoint(this, e.getPoint(), SpaceShooter.panel);
-//        strokePoints.add(p);
-//        Result result = dollarRecognizer.recognize(strokePoints);
-//        stroke(strokePoints);
-//        System.out.println(result.getName());
-//        this.lastResult = result;
-//        repaint();
-//    }
-//
-//    @Override
-//    public void mouseEntered(MouseEvent e) {
-//
-//    }
-//
-//    @Override
-//    public void mouseExited(MouseEvent e) {
-//
-//    }
-//
-//    @Override
-//    public void mouseDragged(MouseEvent e) {
-//        if (e.isPopupTrigger()) {
-//            Point p = SwingUtilities.convertPoint(this, e.getPoint(), SpaceShooter.panel);
-//            strokePoints.add(p);
-//            repaint();
-//        }
-//    }
-//
-//    @Override
-//    public void mouseMoved(MouseEvent e) {
-//
-//    }
+    }
 
 
     private class TAdapter extends KeyAdapter {
