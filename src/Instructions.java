@@ -9,8 +9,8 @@ import java.io.IOException;
 public class Instructions extends JPanel {
     private SpaceShooter spaceShooter;
 
-    private final int BUTTON_WIDTH = 200;
-    private final int BUTTON_HEIGHT = 60;
+    private final int BUTTON_WIDTH = 100;
+    private final int BUTTON_HEIGHT = 100;
 
     public Instructions() {
         initInstructions();
@@ -27,7 +27,7 @@ public class Instructions extends JPanel {
                 spaceShooter.cardLayout.show(spaceShooter.panel, "home");
             }
         });
-        backButton.setBounds(SpaceShooter.WIDTH / 2 - BUTTON_WIDTH / 2, SpaceShooter.HEIGHT - 115, BUTTON_WIDTH, BUTTON_HEIGHT);
+        backButton.setBounds(50, 25, BUTTON_WIDTH, BUTTON_HEIGHT);
         backButton.setText("Back");
         add(backButton);
     }
