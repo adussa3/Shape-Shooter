@@ -12,7 +12,7 @@ import javax.swing.*;
 public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
-    private ShapeShooter SpaceShooter;
+    private SpaceShooter SpaceShooter;
     private SpaceShip spaceship;
     public List<Alien> aliens;
     private boolean ingame;
@@ -57,25 +57,20 @@ public class Board extends JPanel implements ActionListener {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                //if (e.isPopupTrigger()) {
-                    strokePoints = new ArrayList<Point2D>();
-                    // translate to canvas coordinate system
-                    strokePoints.add(e.getPoint());
-                    lastResult = null;
-                    repaint();
-                //}
+                strokePoints = new ArrayList<Point2D>();
+                strokePoints.add(e.getPoint());
+                lastResult = null;
+                repaint();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                //if (e.isPopupTrigger()) {
-                    // translate to canvas coordinate system
-                    strokePoints.add(e.getPoint());
-                    Result result = stroke(strokePoints);
-                    System.out.println(result.getName());
-                    lastResult = result;
-                    repaint();
-                //}
+                strokePoints.add(e.getPoint());
+                Result result = stroke(strokePoints);
+                System.out.println(result.getName());
+                strokePoints = new ArrayList<>();
+                lastResult = result;
+                repaint();
             }
 
             @Override
@@ -92,10 +87,8 @@ public class Board extends JPanel implements ActionListener {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                //if (e.isPopupTrigger()) {
-                    strokePoints.add(e.getPoint());
-                    repaint();
-               // }
+                strokePoints.add(e.getPoint());
+                repaint();
             }
 
             @Override
@@ -194,7 +187,6 @@ public class Board extends JPanel implements ActionListener {
 
     public Result stroke(ArrayList<Point2D> p) {
         Result result = dollarRecognizer.recognize(p);
-        String shape = result.getName();
 
         if (result.getName().equals("star")) {
             aliens = new ArrayList<>();
@@ -203,7 +195,13 @@ public class Board extends JPanel implements ActionListener {
                 aliens.remove(i);
             }
         } else if (result.getName().equals("circle")) {
-            spaceship.invincible = true;
+            spaceship.blue = true;
+            spaceship.initCraft();
+        } else if (result.getName().equals("rectangle")) {
+            spaceship.green = true;
+            spaceship.initCraft();
+        } else if (result.getName().equals("pigtail")) {
+            spaceship.red = true;
             spaceship.initCraft();
         }
 
@@ -229,6 +227,11 @@ public class Board extends JPanel implements ActionListener {
             drawObjects(g);
         } else {
             drawGameOver(g);
+        }
+
+        g.setColor(Color.white);
+        for (int i = 0; i < strokePoints.size() - 1; i++) {
+            g.drawLine((int) strokePoints.get(i).getX(), (int) strokePoints.get(i).getY(), (int) strokePoints.get(i + 1).getX(), (int) strokePoints.get(i + 1).getY());
         }
 
         Toolkit.getDefaultToolkit().sync();
@@ -273,10 +276,10 @@ public class Board extends JPanel implements ActionListener {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ShapeShooter.cardLayout.show(ShapeShooter.panel, "home");
+                SpaceShooter.cardLayout.show(SpaceShooter.panel, "home");
             }
         });
-        backButton.setBounds(ShapeShooter.WIDTH / 2 - BUTTON_WIDTH / 2, ShapeShooter.HEIGHT - 200, BUTTON_WIDTH, BUTTON_HEIGHT);
+        backButton.setBounds(SpaceShooter.WIDTH / 2 - BUTTON_WIDTH / 2, SpaceShooter.HEIGHT - 200, BUTTON_WIDTH, BUTTON_HEIGHT);
         backButton.setText("Back");
         add(backButton);
     }
@@ -332,8 +335,18 @@ public class Board extends JPanel implements ActionListener {
         for (Alien alien : aliens) {
             Rectangle r2 = alien.getBounds();
             if (r3.intersects(r2)) {
-                if (spaceship.invincible) {
-                    spaceship.invincible = false;
+                if (spaceship.blue) {
+                    spaceship.blue = false;
+                    spaceship.initCraft();
+                    alien.setVisible(false);
+                } else if (spaceship.green) {
+                    spaceship.green = false;
+                    spaceship.blue = true;
+                    spaceship.initCraft();
+                    alien.setVisible(false);
+                } else if (spaceship.red) {
+                    spaceship.red = false;
+                    spaceship.green = true;
                     spaceship.initCraft();
                     alien.setVisible(false);
                 } else {

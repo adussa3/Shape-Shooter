@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Instructions extends JPanel {
-    private ShapeShooter shapeShooter;
+    private SpaceShooter spaceShooter;
 
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 60;
@@ -17,17 +17,17 @@ public class Instructions extends JPanel {
     }
 
     private void initInstructions() {
-        setPreferredSize(new Dimension(ShapeShooter.WIDTH, ShapeShooter.HEIGHT));
+        setPreferredSize(new Dimension(SpaceShooter.WIDTH, SpaceShooter.HEIGHT));
         setLayout(null);
 
         JButton backButton = new JButton();
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                shapeShooter.cardLayout.show(shapeShooter.panel, "home");
+                spaceShooter.cardLayout.show(spaceShooter.panel, "home");
             }
         });
-        backButton.setBounds(ShapeShooter.WIDTH / 2 - BUTTON_WIDTH / 2,ShapeShooter.HEIGHT - 115, BUTTON_WIDTH, BUTTON_HEIGHT);
+        backButton.setBounds(SpaceShooter.WIDTH / 2 - BUTTON_WIDTH / 2, SpaceShooter.HEIGHT - 115, BUTTON_WIDTH, BUTTON_HEIGHT);
         backButton.setText("Back");
         add(backButton);
     }

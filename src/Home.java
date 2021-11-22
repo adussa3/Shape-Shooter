@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Home extends JPanel {
-    private ShapeShooter shapeShooter;
+    private SpaceShooter spaceShooter;
 
     private final int BUTTON_WIDTH = 200;
     private final int BUTTON_HEIGHT = 60;
@@ -17,17 +17,17 @@ public class Home extends JPanel {
     }
 
     private void initHome() {
-        setPreferredSize(new Dimension(ShapeShooter.WIDTH, ShapeShooter.HEIGHT));
+        setPreferredSize(new Dimension(SpaceShooter.WIDTH, SpaceShooter.HEIGHT));
         setLayout(null);
 
         JButton instructionsButton = new JButton();
         instructionsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                shapeShooter.cardLayout.show(shapeShooter.panel, "instructions");
+                spaceShooter.cardLayout.show(spaceShooter.panel, "instructions");
             }
         });
-        instructionsButton.setBounds(ShapeShooter.WIDTH / 2 - BUTTON_WIDTH / 2,ShapeShooter.HEIGHT - 150 - BUTTON_HEIGHT - 10, BUTTON_WIDTH, BUTTON_HEIGHT);
+        instructionsButton.setBounds(SpaceShooter.WIDTH / 2 - BUTTON_WIDTH / 2, SpaceShooter.HEIGHT - 150 - BUTTON_HEIGHT - 10, BUTTON_WIDTH, BUTTON_HEIGHT);
         instructionsButton.setText("Instructions");
         add(instructionsButton);
 
@@ -36,11 +36,11 @@ public class Home extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Board board = new Board();
-                shapeShooter.panel.add(board, "board");
-                shapeShooter.cardLayout.show(shapeShooter.panel, "board");
+                spaceShooter.panel.add(board, "board");
+                spaceShooter.cardLayout.show(spaceShooter.panel, "board");
             }
         });
-        startButton.setBounds(ShapeShooter.WIDTH / 2 - BUTTON_WIDTH / 2,ShapeShooter.HEIGHT - 150, BUTTON_WIDTH, BUTTON_HEIGHT);
+        startButton.setBounds(SpaceShooter.WIDTH / 2 - BUTTON_WIDTH / 2, SpaceShooter.HEIGHT - 150, BUTTON_WIDTH, BUTTON_HEIGHT);
         startButton.setText("Start");
         add(startButton);
     }

@@ -94,9 +94,7 @@ public class Unistroke {
 		this.originalPoints = p;
 		this.name = n;
 		this.points = resample(p, NUM_POINTS);
-		//if (this.points.size() != NUM_POINTS) {
-		//	System.out.println("+++ Unistroke " + name + " has " + this.points.size() + " points.");
-		//}
+
 
 		this.radians = indicativeAngle(this.points);
 		this.origBBox = boundingBox(this.points);

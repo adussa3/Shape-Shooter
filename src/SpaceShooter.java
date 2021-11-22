@@ -1,15 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class ShapeShooter extends JFrame {
+public class SpaceShooter extends JFrame {
     static final int WIDTH = 800;
     static final int HEIGHT = 600;
 
     static CardLayout cardLayout = new CardLayout();
     static JPanel panel = new JPanel(cardLayout);
-    static Board board = new Board();
 
-    public ShapeShooter() {
+
+    public SpaceShooter() {
         createAndShowGUI();
     }
 
@@ -34,7 +34,7 @@ public class ShapeShooter extends JFrame {
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-            ShapeShooter ex = new ShapeShooter();
+            SpaceShooter ex = new SpaceShooter();
             ex.setVisible(true);
         });
     }

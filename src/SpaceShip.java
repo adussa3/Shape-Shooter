@@ -5,7 +5,9 @@ import java.util.List;
 public class SpaceShip extends Sprite {
     private int dx;
     private int dy;
-    boolean invincible;
+    boolean blue;
+    boolean green;
+    boolean red;
 
     static String direction = "up";
 
@@ -15,15 +17,23 @@ public class SpaceShip extends Sprite {
     public SpaceShip(int x, int y) {
         super(x, y);
         direction = "up";
-        invincible = false;
+        blue = false;
+        green = false;
+        red = false;
         initCraft();
     }
 
     public void initCraft() {
-        if (!invincible) {
-            loadImage("src/resources/spaceship_" + direction + ".png");
+        if (blue){
+            loadImage("src/resources/spaceshipBlue_" + direction + ".png");
+        }
+        if (green){
+            loadImage("src/resources/spaceshipGreen_" + direction + ".png");
+        }
+        if (red) {
+            loadImage("src/resources/spaceshipRed_" + direction + ".png");
         } else {
-            loadImage("src/resources/spaceshipInvincible_" + direction + ".png");
+            loadImage("src/resources/spaceship_" + direction + ".png");
         }
         getImageDimensions();
     }
@@ -41,12 +51,12 @@ public class SpaceShip extends Sprite {
             y = 1;
         }
 
-        if (x > ShapeShooter.WIDTH - width) {
-            x = ShapeShooter.WIDTH - width;
+        if (x > SpaceShooter.WIDTH - width) {
+            x = SpaceShooter.WIDTH - width;
         }
 
-        if (y > ShapeShooter.HEIGHT - height - 28) {
-            y = ShapeShooter.HEIGHT - height - 28;
+        if (y > SpaceShooter.HEIGHT - height - 28) {
+            y = SpaceShooter.HEIGHT - height - 28;
         }
     }
 
@@ -62,35 +72,15 @@ public class SpaceShip extends Sprite {
             y = 1;
         }
 
-        if (x > ShapeShooter.WIDTH - width) {
-            x = ShapeShooter.WIDTH - width;
+        if (x > SpaceShooter.WIDTH - width) {
+            x = SpaceShooter.WIDTH - width;
         }
 
-        if (y > ShapeShooter.HEIGHT - height - 28) {
-            y = ShapeShooter.HEIGHT - height - 28;
+        if (y > SpaceShooter.HEIGHT - height - 28) {
+            y = SpaceShooter.HEIGHT - height - 28;
         }
     }
 
-//    public void move(int dx, int dy) {
-//        x = dx;
-//        y = dy;
-//
-//        if (x < 1) {
-//            x = 1;
-//        }
-//
-//        if (y < 1) {
-//            y = 1;
-//        }
-//
-//        if (x > ShapeShooter.WIDTH - width) {
-//            x = ShapeShooter.WIDTH - width;
-//        }
-//
-//        if (y > ShapeShooter.HEIGHT - height - 28) {
-//            y = ShapeShooter.HEIGHT - height - 28;
-//        }
-//    }
 
     public List<Missile> getMissiles() {
         return missiles;
