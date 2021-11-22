@@ -5,6 +5,7 @@ import java.util.List;
 public class SpaceShip extends Sprite {
     private int dx;
     private int dy;
+    boolean invincible;
 
     static String direction = "up";
 
@@ -14,11 +15,21 @@ public class SpaceShip extends Sprite {
     public SpaceShip(int x, int y) {
         super(x, y);
         direction = "up";
+        invincible = false;
         initCraft();
     }
 
     public void initCraft() {
         loadImage("src/resources/spaceship_" + direction + ".png");
+        getImageDimensions();
+    }
+
+    public void changeCraft() {
+        if (invincible) {
+            loadImage("src/resources/spaceship_" + direction + ".png");
+        } else {
+            loadImage("src/resources/spaceshipInvincible_" + direction + ".png");
+        }
         getImageDimensions();
     }
 
@@ -96,6 +107,8 @@ public class SpaceShip extends Sprite {
         }
         missiles.add(missile);
     }
+
+
 
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();

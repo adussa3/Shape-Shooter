@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,9 +14,13 @@ public class Board extends JPanel implements ActionListener {
     private Timer timer;
     private ShapeShooter SpaceShooter;
     private SpaceShip spaceship;
-    private List<Alien> aliens;
+    public List<Alien> aliens;
     private boolean ingame;
     private int score;
+    private static DollarRecognizer dollarRecognizer;
+    private boolean isStroke;
+    private boolean isDragging;
+    private ArrayList<Point2D> strokePoints;
 
     private final Random random = new Random();
     private final int ICRAFT_X = SpaceShooter.WIDTH / 2 - 50;
@@ -48,10 +53,65 @@ public class Board extends JPanel implements ActionListener {
 
         addKeyListener(new TAdapter());
 
-        addMouseListener(new MouseAdapter() {
+
+//        addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                spaceship.fire();
+//            }
+//        });
+
+        addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    isStroke = true;
+                    strokePoints.add(e.getPoint());
+                    repaint();
+                } else {
+                    //if it just started a drag
+                    if (!isDragging) {
+                        isDragging = true;
+                    }
+                }
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
+        });
+
+        addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                spaceship.fire();
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (isStroke) {
+                    isStroke = false;
+                    stroke(strokePoints);
+                    strokePoints = new ArrayList<>();
+                    repaint();
+                }
+                isDragging = false;
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
 
@@ -139,6 +199,24 @@ public class Board extends JPanel implements ActionListener {
         aliens = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             generateAlien();
+        }
+    }
+
+    public void stroke(ArrayList<Point2D> p) {
+        Result result = dollarRecognizer.recognize(p);
+        String shape = result.getName();
+
+        if (result.getName().equals("star")) {
+            aliens = new ArrayList<>();
+        } else if (result.getName().equals("triangle")) {
+            for (int i = 0; i < aliens.size() / 2; i++) {
+                aliens.remove(i);
+            }
+        } else if (result.getName().equals("circle")) {
+            spaceship.invincible = true;
+            spaceship.changeCraft();
+        } else {
+            spaceship.fire();
         }
     }
 
@@ -273,9 +351,14 @@ public class Board extends JPanel implements ActionListener {
         for (Alien alien : aliens) {
             Rectangle r2 = alien.getBounds();
             if (r3.intersects(r2)) {
-                spaceship.setVisible(false);
-                alien.setVisible(false);
-                ingame = false;
+                if (spaceship.invincible) {
+                    spaceship.invincible = false;
+                    spaceship.changeCraft();
+                } else {
+                    spaceship.setVisible(false);
+                    alien.setVisible(false);
+                    ingame = false;
+                }
             }
         }
 
@@ -300,6 +383,7 @@ public class Board extends JPanel implements ActionListener {
             generateAlien();
         }
     }
+
 
     private class TAdapter extends KeyAdapter {
         @Override
