@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class Instructions extends JPanel {
     private SpaceShooter spaceShooter;
@@ -36,10 +37,8 @@ public class Instructions extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        try {
-            g.drawImage(ImageIO.read(new File("src/resources/instructions.png")), 0, 0, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        URL url = getClass().getResource("resources/instructions.png");
+        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        g.drawImage(image, 0, 0, this);
     }
 }

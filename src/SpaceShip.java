@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +21,24 @@ public class SpaceShip extends Sprite {
 
     public void initCraft() {
         if (invincibility == 0) {
-            loadImage("src/resources/spaceship_" + direction + ".png");
+            URL url = getClass().getResource("resources/spaceship_" + direction + ".png");
+            Image image = Toolkit.getDefaultToolkit().getImage(url);
+            loadImage(image);
         }
-        if (invincibility == 1){
-            loadImage("src/resources/spaceshipBlue_" + direction + ".png");
+        if (invincibility == 1) {
+            URL url = getClass().getResource("resources/spaceshipBlue_" + direction + ".png");
+            Image image = Toolkit.getDefaultToolkit().getImage(url);
+            loadImage(image);
         }
-        if (invincibility == 2){
-            loadImage("src/resources/spaceshipGreen_" + direction + ".png");
+        if (invincibility == 2) {
+            URL url = getClass().getResource("resources/spaceshipGreen_" + direction + ".png");
+            Image image = Toolkit.getDefaultToolkit().getImage(url);
+            loadImage(image);
         }
         if (invincibility == 3) {
-            loadImage("src/resources/spaceshipRed_" + direction + ".png");
+            URL url = getClass().getResource("resources/spaceshipRed_" + direction + ".png");
+            Image image = Toolkit.getDefaultToolkit().getImage(url);
+            loadImage(image);
         }
         getImageDimensions();
     }

@@ -1,3 +1,6 @@
+import java.awt.*;
+import java.net.URL;
+
 public class Missile1 extends Missile {
     public Missile1(int x, int y) {
         super(x, y, 1, 2);
@@ -5,7 +8,9 @@ public class Missile1 extends Missile {
 
     @Override
     void initMissile() {
-        loadImage("src/resources/missile1.png");
+        URL url = getClass().getResource("resources/missile1.png");
+        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        loadImage(image);
         getImageDimensions();
     }
 }

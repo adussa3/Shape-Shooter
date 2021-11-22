@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -203,11 +204,9 @@ public class Board extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        try {
-            g.drawImage(ImageIO.read(new File("src/resources/background.png")), 0, 0, this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        URL url = getClass().getResource("resources/background.png");
+        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        g.drawImage(image, 0, 0, this);
 
         if (ingame) {
             drawObjects(g);

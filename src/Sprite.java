@@ -20,6 +20,11 @@ public class Sprite {
         image = ii.getImage();
     }
 
+    protected void loadImage(Image image) {
+        ImageIcon ii = new ImageIcon(image);
+        this.image = ii.getImage();
+    }
+
     protected void getImageDimensions() {
         width = image.getWidth(null);
         height = image.getHeight(null);

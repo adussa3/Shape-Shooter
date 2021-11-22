@@ -1,3 +1,6 @@
+import java.awt.*;
+import java.net.URL;
+
 public class Alien extends Sprite {
     private final int INITIAL_Y = 600;
     private int health = 4;
@@ -8,7 +11,9 @@ public class Alien extends Sprite {
     }
 
     private void initAlien() {
-        loadImage("src/resources/alien.png");
+        URL url = getClass().getResource("resources/alien.png");
+        Image image = Toolkit.getDefaultToolkit().getImage(url);
+        loadImage(image);
         getImageDimensions();
     }
 
