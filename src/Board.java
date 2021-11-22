@@ -411,7 +411,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
         Result result = dollarRecognizer.recognize(strokePoints);
         stroke(strokePoints);
         System.out.println(result.getName());
-        
         this.lastResult = result;
         repaint();
     }
@@ -428,9 +427,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener,
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        Point p = SwingUtilities.convertPoint(this, e.getPoint(), SpaceShooter.panel);
-        strokePoints.add(p);
-        repaint();
+        if (e.isPopupTrigger()) {
+            Point p = SwingUtilities.convertPoint(this, e.getPoint(), SpaceShooter.panel);
+            strokePoints.add(p);
+            repaint();
+        }
     }
 
     @Override
